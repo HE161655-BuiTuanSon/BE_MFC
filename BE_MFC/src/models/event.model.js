@@ -52,10 +52,12 @@ export default (sequelize, DataTypes) => {
   );
 
   // Thiết lập quan hệ với bảng User
-  Event.belongsTo(sequelize.models.User, {
-    foreignKey: "created_by",
-    as: "creator",
-  });
+  Event.associate = (models) => {
+    Event.belongsTo(models.User, {
+      foreignKey: "created_by",
+      as: "creator", // Sửa 'as' để tránh nhầm lẫn với 'id'
+    });
+  };
 
   return Event;
 };

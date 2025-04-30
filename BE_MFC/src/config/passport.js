@@ -66,7 +66,7 @@ passport.use(
           name: ` ${profile.name.familyName || ""} ${
             profile.name.givenName || ""
           }`,
-          email: email || null,
+          email: email || `fb_${profile.id}@facebook.com`,
           avatar_url: profile.photos?.[0]?.value || null,
           date_of_birth: dob,
           password: "facebook_oauth",

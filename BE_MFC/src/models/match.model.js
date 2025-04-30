@@ -46,10 +46,14 @@ export default (sequelize, DataTypes) => {
   );
 
   Match.associate = (models) => {
-    Match.belongsTo(models.FootballClub, {
-      foreignKey: "home_team",
-      as: "homeTeam",
-    });
+    if (models.FootballClub) {
+      Match.belongsTo(models.FootballClub, {
+        foreignKey: "home_team",
+        as: "homeTeam",
+      });
+    } else {
+      console.warn("models.FootballClub not found in Match.associate");
+    }
   };
 
   return Match;

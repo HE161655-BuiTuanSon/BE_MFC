@@ -21,14 +21,6 @@ export const getAllUsers = async (req, res) => {
       });
     }
 
-    // Kiểm tra quyền admin (role_id === 1 là admin)
-    if (user.role_id !== 1) {
-      return res
-        .status(403)
-        .json({ success: false, message: "Không đủ quyền truy cập." });
-    }
-
-    // Lấy tất cả người dùng nếu có quyền admin
     const users = await db.User.findAll();
     return res.status(200).json({ success: true, data: users });
   } catch (err) {
