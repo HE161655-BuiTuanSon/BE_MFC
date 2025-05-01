@@ -22,5 +22,7 @@ import userRoutes from "./routes/user.routes.js";
 app.use("/api", userRoutes);
 import footballClubRoutes from "./routes/footballclub.routes.js";
 app.use("/footballclub", footballClubRoutes);
+import matchRoutes from "./routes/match.routes.js";
+app.use("/match", matchRoutes);
 
 export default app;
