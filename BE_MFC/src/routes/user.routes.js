@@ -23,7 +23,6 @@ const router = express.Router();
  *       500:
  *         description: Lỗi server
  */
-
 router.get("/users", checkRole(1, 2), getAllUsers); //role 1 = admin, 2 = player, 3 = captain, 4 = treasurer
 
 export default router;
