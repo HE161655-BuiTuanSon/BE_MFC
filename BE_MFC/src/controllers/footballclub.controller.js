@@ -77,8 +77,6 @@ export const createFootballClub = async (req, res) => {
       founded,
       logo_url: fileUrl,
       fund: 0,
-      captainId: user.id,
-      treasurerId: user.id,
       isActive: true,
     });
 

@@ -45,6 +45,7 @@ export default (sequelize, DataTypes) => {
       stadiumId: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: true,
+        field: "stadiumId",
         references: {
           model: "Stadiums",
           key: "id",
@@ -60,7 +61,7 @@ export default (sequelize, DataTypes) => {
       },
     },
     {
-      tableName: "matches",
+      tableName: "Matches",
       underscored: true,
       timestamps: true,
       createdAt: "createdAt",

@@ -5,7 +5,9 @@ import { where } from "sequelize";
 import dotenv from "dotenv";
 dotenv.config();
 import jwt from "jsonwebtoken";
+
 const User = db.User;
+const UserRoles = db.UserRoles;
 
 passport.use(
   new FacebookStrategy(
@@ -34,10 +36,11 @@ passport.use(
         const user = await User.findOne({ where: { facebook_id: profile.id } });
 
         // Tạo tên và avatar mới từ profile
-        const newName = ` ${profile.name.familyName || ""} ${
+        const newName = `${profile.name.familyName || ""} ${
           profile.name.givenName || ""
-        }`;
+        }`.trim();
         const newAvatarUrl = profile.photos?.[0]?.value || null;
+
         if (user) {
           // Nếu người dùng đã tồn tại, kiểm tra và cập nhật thông tin
           let isUpdated = false;
@@ -56,30 +59,62 @@ passport.use(
               avatar_url: user.avatar_url,
             });
           }
+
+          const token = jwt.sign(
+            { id: user.id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: "7d" }
+          );
+          const refreshToken = jwt.sign(
+            { id: user.id, email: user.email },
+            process.env.JWT_REFRESH_SECRET,
+            { expiresIn: "30d" }
+          );
+
+          user.dataValues.token = token;
+          user.dataValues.refreshToken = refreshToken;
           return done(null, user);
         }
+
         // Nếu người dùng chưa tồn tại, tạo mới
-        const roleId = 2;
         const dob = profile.birthday ? new Date(profile.birthday) : null;
         const newUserData = {
           facebook_id: profile.id,
-          name: ` ${profile.name.familyName || ""} ${
+          name: `${profile.name.familyName || ""} ${
             profile.name.givenName || ""
-          }`,
+          }`.trim(),
           email: email || `fb_${profile.id}@facebook.com`,
           avatar_url: profile.photos?.[0]?.value || null,
           date_of_birth: dob,
           password: "facebook_oauth",
-          role_id: roleId,
         };
 
         const newUser = await User.create(newUserData);
+
+        // Gán vai trò mặc định (toàn cục) cho người dùng mới
+        const defaultRoleId = 1;
+        await UserRoles.create({
+          userId: newUser.id,
+          roleId: defaultRoleId,
+          created_at: new Date(),
+          updated_at: new Date(),
+        });
+
         const token = jwt.sign(
           { id: newUser.id, email: newUser.email },
           process.env.JWT_SECRET,
           { expiresIn: "7d" }
         );
+
+        const refreshToken = jwt.sign(
+          { id: newUser.id, email: newUser.email },
+          process.env.JWT_REFRESH_SECRET,
+          { expiresIn: "30d" }
+        );
+
+        // Gán vào user để gửi qua `done`
         newUser.dataValues.token = token;
+        newUser.dataValues.refreshToken = refreshToken;
         return done(null, newUser);
       } catch (err) {
         console.log(err);

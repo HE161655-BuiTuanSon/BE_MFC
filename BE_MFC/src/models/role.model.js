@@ -20,13 +20,12 @@ export default (sequelize, DataTypes) => {
       timestamps: true,
     }
   );
-
   Role.associate = (models) => {
-    Role.hasMany(models.User, {
-      foreignKey: "role_id",
-      as: "users",
+    Role.belongsToMany(models.User, {
+      through: "UserRoles",
+      foreignKey: "roleId",
+      otherKey: "userId",
     });
   };
-
   return Role;
 };

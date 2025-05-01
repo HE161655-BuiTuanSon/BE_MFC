@@ -1,43 +1,62 @@
-"use strict";
+// src/models/user.model.js
 export default (sequelize, DataTypes) => {
   const User = sequelize.define(
     "User",
     {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
-        autoIncrement: true,
         primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
       },
-      name: { type: DataTypes.STRING(255), allowNull: false },
-      email: { type: DataTypes.STRING(255), allowNull: false, unique: true },
-      password: { type: DataTypes.STRING, allowNull: false },
-      role_id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+      name: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
       },
-      facebook_id: DataTypes.STRING,
-      avatar_url: DataTypes.STRING,
-      date_of_birth: DataTypes.DATE,
-      score: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        defaultValue: 0,
+      email: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+      },
+      facebook_id: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      avatar_url: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      date_of_birth: {
+        type: DataTypes.DATE,
+        allowNull: true,
       },
       is_active: {
         type: DataTypes.BOOLEAN,
+        allowNull: false,
         defaultValue: true,
+      },
+      score: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        defaultValue: 0,
       },
     },
     {
       tableName: "users",
-      underscored: true,
       timestamps: true,
-      defaultScope: { attributes: { exclude: ["password"] } },
+      createdAt: "created_at",
+      updatedAt: "updated_at",
     }
   );
-
   User.associate = (models) => {
-    User.belongsTo(models.Role, {
-      foreignKey: "role_id",
-      as: "role",
+    User.belongsToMany(models.Role, {
+      through: "UserRoles",
+      foreignKey: "userId",
+      otherKey: "roleId",
     });
   };
 

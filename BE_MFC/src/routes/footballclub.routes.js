@@ -1,5 +1,5 @@
 import express from "express";
-import { checkRole } from "../middlewares/role.middleware.js";
+import { checkRole, checkClubRole } from "../middlewares/role.middleware.js";
 import { createFootballClub } from "../controllers/footballclub.controller.js";
 import multer from "multer";
 const upload = multer({ dest: "uploads/" });
@@ -47,8 +47,9 @@ const router = express.Router();
 router.post(
   "/create",
   upload.single("file"),
-  checkRole(1, 2, 3, 4),
+  checkRole("Admin"), //Admin , Player
+  // checkClubRole("header", "Captain"), //Captain, Player, Treasurer
   createFootballClub
-); //role 1 = admin, 2 = player, 3 = captain, 4 = treasurer
+);
 
 export default router;
