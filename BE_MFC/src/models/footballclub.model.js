@@ -23,6 +23,7 @@ export default (sequelize, DataTypes) => {
       },
       isActive: {
         type: DataTypes.BOOLEAN,
+        field: "isActive",
         defaultValue: true,
       },
       fund: {
@@ -31,15 +32,17 @@ export default (sequelize, DataTypes) => {
       },
       captainId: {
         type: DataTypes.INTEGER.UNSIGNED,
+        field: "captainId",
         allowNull: true,
       },
       treasurerId: {
         type: DataTypes.INTEGER.UNSIGNED,
+        field: "treasurerId",
         allowNull: true,
       },
     },
     {
-      tableName: "football_clubs",
+      tableName: "FootballClubs",
       underscored: true,
       timestamps: true,
     }

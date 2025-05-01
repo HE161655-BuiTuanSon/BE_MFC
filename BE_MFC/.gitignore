@@ -1,1 +1,21 @@
+# Node modules
 node_modules/
+
+# Environment variables
+.env
+
+# Google OAuth token
+src/tokens/drive-token.js
+
+# Multer upload temp
+uploads/
+
+# Logs
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Sensitive files (if any)
+config/

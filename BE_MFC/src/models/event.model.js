@@ -55,7 +55,7 @@ export default (sequelize, DataTypes) => {
   Event.associate = (models) => {
     Event.belongsTo(models.User, {
       foreignKey: "created_by",
-      as: "creator", // Sửa 'as' để tránh nhầm lẫn với 'id'
+      as: "creator",
     });
   };
 
