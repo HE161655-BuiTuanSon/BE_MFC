@@ -47,8 +47,8 @@ const router = express.Router();
 router.post(
   "/create",
   upload.single("file"),
-  checkRole("Player"),
-  checkClubRole("header", "Captain"),
+  checkRole("Admin"), //Admin , Player
+  // checkClubRole("header", "Captain"), //Captain, Player, Treasurer
   createFootballClub
 );
 

@@ -1,5 +1,5 @@
 import express from "express";
-import { checkRole } from "../middlewares/role.middleware.js";
+import { checkRole, checkClubRole } from "../middlewares/role.middleware.js";
 import { createMatch } from "../controllers/match.controller.js";
 const router = express.Router();
 /**
@@ -9,6 +9,13 @@ const router = express.Router();
  *     summary: Create a new match
  *     tags:
  *       - Matches
+ *     parameters:
+ *       - in: header
+ *         name: clubId
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: ID của câu lạc bộ
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -47,6 +54,11 @@ const router = express.Router();
  *         description: Forbidden - Only captains (role 3) can create matches
  */
 
-router.post("/create", checkRole("Player"), createMatch);
+router.post(
+  "/create",
+  checkRole("Player"),
+  checkClubRole("header", "Captain"),
+  createMatch
+);
 
 export default router;

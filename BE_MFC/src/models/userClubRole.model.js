@@ -1,7 +1,7 @@
 "use-strict";
 export default (sequelize, DataTypes) => {
   const UserClubRole = sequelize.define(
-    "UserClubRole",
+    "UserClubRoles",
     {
       user_id: {
         type: DataTypes.INTEGER.UNSIGNED,
@@ -11,8 +11,9 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      role_id: {
+      roleId: {
         type: DataTypes.INTEGER.UNSIGNED,
+        field: "roleId",
         allowNull: false,
       },
     },
@@ -32,7 +33,7 @@ export default (sequelize, DataTypes) => {
       as: "club",
     });
     UserClubRole.belongsTo(models.Role, {
-      foreignKey: "role_id",
+      foreignKey: "roleId",
       as: "role",
     });
   };
