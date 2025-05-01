@@ -2,7 +2,7 @@ import { db } from "../models/index.js";
 import jwt from "jsonwebtoken";
 
 // Middleware kiểm tra role của người dùng
-export const checkRole = (requiredRole) => {
+export const checkRole = (...allowedRoles) => {
   return async (req, res, next) => {
     const token = req.header("Authorization")?.replace("Bearer ", "");
     if (!token) {
@@ -14,7 +14,6 @@ export const checkRole = (requiredRole) => {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // Kiểm tra xem người dùng có tồn tại không
       const user = await db.User.findByPk(decoded.id);
       if (!user || !user.is_active) {
         return res.status(403).json({
@@ -23,15 +22,13 @@ export const checkRole = (requiredRole) => {
         });
       }
 
-      // Kiểm tra quyền người dùng (so sánh role_id của người dùng với role yêu cầu)
-      if (user.role_id !== requiredRole) {
+      if (!allowedRoles.includes(user.role_id)) {
         return res
           .status(403)
           .json({ success: false, message: "Không đủ quyền truy cập." });
       }
 
-      // Nếu có quyền truy cập, tiếp tục
-      req.user = user; // Đảm bảo thông tin người dùng có thể sử dụng trong route
+      req.user = user;
       next();
     } catch (err) {
       return res

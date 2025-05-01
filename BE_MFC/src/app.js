@@ -20,5 +20,7 @@ import authRoutes from "./routes/auth.routes.js";
 app.use("/auth", authRoutes);
 import userRoutes from "./routes/user.routes.js";
 app.use("/api", userRoutes);
+import footballClubRoutes from "./routes/footballclub.routes.js";
+app.use("/footballclub", footballClubRoutes);
 
 export default app;
